@@ -2,6 +2,8 @@ package login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
@@ -24,41 +28,62 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import banka3_app.composeapp.generated.resources.Res
 import banka3_app.composeapp.generated.resources.background
 import banka3_app.composeapp.generated.resources.logofull
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import utils.collectAsStateMultiplatform
+import utils.koinViewModel
 
 @Composable
 @Preview
-fun LoginScreen() {
+fun LoginScreen(
+    loginViewModel: LoginViewModel = koinViewModel()
+) {
+
+    val state by loginViewModel.state.collectAsStateMultiplatform()
+
     LoginScreenContent(
         modifier = Modifier.consumeWindowInsets(
             WindowInsets.systemBars.only(WindowInsetsSides.Vertical)
-        )
+        ),
+        state.email,
+        state.password,
+        onEmailChange = loginViewModel::setEmail,
+        onPasswordChange = loginViewModel::setPassword
     )
 }
 
 @Composable
 fun LoginScreenContent(
-    modifier: Modifier
+    modifier: Modifier,
+    email: String,
+    password: String,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit
 ) {
 
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
 
     Surface {
         Box(
             modifier = modifier.fillMaxSize()
+                .clickable(
+                    interactionSource = MutableInteractionSource(),
+                    indication = null,
+                    onClick = { focusManager.clearFocus() }
+                )
+
         ) {
             Image(
                 painter = painterResource(Res.drawable.background),
@@ -81,8 +106,9 @@ fun LoginScreenContent(
                     modifier = modifier,
                     email = email,
                     password = password,
-                    onEmailChange = { email = it },
-                    onPasswordChange = { password = it }
+                    onEmailChange = onEmailChange,
+                    onPasswordChange = onPasswordChange,
+                    focusManager = focusManager
                 )
             }
         }
@@ -98,7 +124,9 @@ fun LoginForm(
     password: String,
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
+    focusManager: FocusManager
 ) {
+
     Column(
         modifier = modifier.padding(20.dp)
             .background(Color.White, shape = RoundedCornerShape(10.dp))
@@ -109,7 +137,13 @@ fun LoginForm(
             modifier = Modifier.width(350.dp),
             value = email,
             placeholder = { Text(text = "Email") },
-            onValueChange = onEmailChange
+            maxLines = 1,
+            onValueChange = onEmailChange,
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Email
+            )
         )
 
         Spacer(modifier = modifier.height(10.dp))
@@ -118,7 +152,13 @@ fun LoginForm(
             modifier = Modifier.width(350.dp),
             value = password,
             placeholder = { Text(text = "Password") },
-            onValueChange = onPasswordChange
+            onValueChange = onPasswordChange,
+            maxLines = 1,
+            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Send,
+                keyboardType = KeyboardType.Password
+            ),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
