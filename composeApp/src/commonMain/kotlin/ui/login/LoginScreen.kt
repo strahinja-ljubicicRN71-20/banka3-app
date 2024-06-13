@@ -33,7 +33,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -74,9 +77,11 @@ fun LoginScreen(
         ),
         state.email,
         state.password,
+        state.shouldShowPassword,
+        state.loginButtonText,
         onEmailChange = loginViewModel::setEmail,
         onPasswordChange = loginViewModel::setPassword,
-        onLoginClicked = loginViewModel::checkIfEmailActive
+        onLoginClicked = loginViewModel::handleLoginButtonClick
     )
 }
 
@@ -86,6 +91,8 @@ fun LoginScreenContent(
     modifier: Modifier,
     email: String,
     password: String,
+    shouldShowPassword: Boolean,
+    loginButtonText: String,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClicked: () -> Unit
@@ -124,6 +131,8 @@ fun LoginScreenContent(
                     modifier = modifier,
                     email = email,
                     password = password,
+                    shouldShowPassword = shouldShowPassword,
+                    loginButtonText = loginButtonText,
                     onEmailChange = onEmailChange,
                     onPasswordChange = onPasswordChange,
                     onLoginClicked = onLoginClicked,
@@ -140,6 +149,8 @@ fun LoginForm(
     modifier: Modifier,
     email: String,
     password: String,
+    shouldShowPassword: Boolean,
+    loginButtonText: String,
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onLoginClicked: () -> Unit = {},
@@ -167,20 +178,22 @@ fun LoginForm(
 
         Spacer(modifier = modifier.height(10.dp))
 
-        TextField(
-            modifier = Modifier.width(350.dp),
-            value = password,
-            placeholder = { Text(text = "Password") },
-            onValueChange = onPasswordChange,
-            maxLines = 1,
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Send,
-                keyboardType = KeyboardType.Password
-            ),
-        )
+        if (shouldShowPassword) {
+            TextField(
+                modifier = Modifier.width(350.dp),
+                value = password,
+                placeholder = { Text(text = "Password") },
+                onValueChange = onPasswordChange,
+                maxLines = 1,
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Send,
+                    keyboardType = KeyboardType.Password
+                ),
+            )
 
-        Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+        }
 
         Button(
             modifier = modifier.width(200.dp),
@@ -188,7 +201,7 @@ fun LoginForm(
                 backgroundColor = Color(0xFF114D7B),
                 contentColor = Color.White
             ),
-            content = { Text(text = "Login") },
+            content = { Text(text = loginButtonText) },
             onClick = onLoginClicked
         )
     }

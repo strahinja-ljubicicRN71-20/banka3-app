@@ -16,7 +16,7 @@ import kotlinx.serialization.json.Json
 import org.koin.core.component.KoinComponent
 
 object HttpClientFactory : KoinComponent {
-    fun getHttpClient(url: String): HttpClient {
+    fun getHttpClient(url: String, service: String): HttpClient {
         return HttpClient {
             install(Logging) {
                 level = LogLevel.ALL
@@ -31,10 +31,9 @@ object HttpClientFactory : KoinComponent {
             defaultRequest {
                 contentType(ContentType.Application.Json)
                 url {
-                    protocol = URLProtocol.HTTP
+                    protocol = URLProtocol.HTTPS
                     host = url
-                    port = 8000
-                    path("api/")
+                    path("$service/api/")
                 }
             }
         }.apply {

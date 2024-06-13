@@ -1,6 +1,6 @@
 package domain.di
 
-import domain.usecase.IsUserActiveUseCase
+import domain.usecase.login.IsUserActiveUseCase
 import ui.login.LoginViewModel
 import org.koin.dsl.module
 

@@ -2,6 +2,7 @@ package di
 
 import android.content.Context
 import data.di.dataModule
+import di.shared.sharedModule
 import domain.di.domainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -15,6 +16,7 @@ actual class KoinInitializer(
             androidContext(context)
             androidLogger()
             modules(
+                sharedModule,
                 domainModule,
                 dataModule
             )
