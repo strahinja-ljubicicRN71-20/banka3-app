@@ -3,7 +3,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import login.LoginScreen
+import ui.login.LoginScreen
 import navigation.AppDestinations
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinContext
@@ -22,7 +22,7 @@ fun App() {
                     //TODO: Implement SplashScreen
                 }
                 composable(AppDestinations.Login.path) {
-                    LoginScreen()
+                    LoginScreen(navController = navController)
                 }
             }
         }

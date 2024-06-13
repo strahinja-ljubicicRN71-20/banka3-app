@@ -1,4 +1,4 @@
-package login
+package ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,7 +26,10 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,22 +40,34 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import banka3_app.composeapp.generated.resources.Res
 import banka3_app.composeapp.generated.resources.background
 import banka3_app.composeapp.generated.resources.logofull
+import navigation.AppDestinations
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import utils.collectAsStateMultiplatform
 import utils.koinViewModel
 
 @Composable
-@Preview
 fun LoginScreen(
-    loginViewModel: LoginViewModel = koinViewModel()
+    loginViewModel: LoginViewModel = koinViewModel(),
+    navController: NavController
 ) {
 
     val state by loginViewModel.state.collectAsStateMultiplatform()
 
+    LaunchedEffect(key1 = null) {
+        loginViewModel.nextScreen.collect {
+            navController.navigate(AppDestinations.SplashScreen.path) {
+                popUpTo(0.toString()) {
+                    inclusive = true
+                }
+            }
+        }
+    }
+    Icons.Default.Check
     LoginScreenContent(
         modifier = Modifier.consumeWindowInsets(
             WindowInsets.systemBars.only(WindowInsetsSides.Vertical)
@@ -60,17 +75,20 @@ fun LoginScreen(
         state.email,
         state.password,
         onEmailChange = loginViewModel::setEmail,
-        onPasswordChange = loginViewModel::setPassword
+        onPasswordChange = loginViewModel::setPassword,
+        onLoginClicked = loginViewModel::checkIfEmailActive
     )
 }
 
 @Composable
+@Preview
 fun LoginScreenContent(
     modifier: Modifier,
     email: String,
     password: String,
     onEmailChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit
+    onPasswordChange: (String) -> Unit,
+    onLoginClicked: () -> Unit
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -108,6 +126,7 @@ fun LoginScreenContent(
                     password = password,
                     onEmailChange = onEmailChange,
                     onPasswordChange = onPasswordChange,
+                    onLoginClicked = onLoginClicked,
                     focusManager = focusManager
                 )
             }
@@ -117,13 +136,13 @@ fun LoginScreenContent(
 
 
 @Composable
-@Preview
 fun LoginForm(
     modifier: Modifier,
     email: String,
     password: String,
     onEmailChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
+    onLoginClicked: () -> Unit = {},
     focusManager: FocusManager
 ) {
 
@@ -170,6 +189,7 @@ fun LoginForm(
                 contentColor = Color.White
             ),
             content = { Text(text = "Login") },
-            onClick = {})
+            onClick = onLoginClicked
+        )
     }
 }
