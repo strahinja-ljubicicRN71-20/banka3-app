@@ -71,6 +71,10 @@ kotlin {
             implementation(libs.ktor.client.logging)
 //            implementation(libs.ktor.client.plugins)
             implementation(libs.ktor.client.negotiation)
+
+            //Datastore
+            implementation(libs.androidx.datastore)
+            implementation(libs.androidx.datastore.preferences.core)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

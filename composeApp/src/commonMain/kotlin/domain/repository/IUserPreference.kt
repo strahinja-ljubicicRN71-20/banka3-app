@@ -1,6 +1,6 @@
 package domain.repository
 
 interface IUserPreference {
-    fun storeToken(token: String)
-    fun getToken(): String
+    suspend fun storeToken(token: String)
+    suspend fun getToken(): String
 }

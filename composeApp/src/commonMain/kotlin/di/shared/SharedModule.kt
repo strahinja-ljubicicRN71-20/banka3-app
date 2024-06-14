@@ -1,8 +1,10 @@
 package di.shared
 
 import data.di.factory.HttpClientFactory
+import data.preference.UserPreference
 import data.repository.login.remote.LoginRepository
 import domain.repository.ILoginRepository
+import domain.repository.IUserPreference
 import domain.usecase.login.IsUserActiveUseCase
 import domain.usecase.login.LoginUseCase
 import io.ktor.client.HttpClient
@@ -42,8 +44,11 @@ val sharedModule = module {
 
     includes(httpClientModule)
 
+    //preferences
+    single<IUserPreference> { UserPreference(get()) }
+
     //use-case
     single { IsUserActiveUseCase(get()) }
-    single { LoginUseCase(get()) }
+    single { LoginUseCase(get(), get()) }
 
 }
