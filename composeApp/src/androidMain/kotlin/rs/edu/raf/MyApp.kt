@@ -3,7 +3,7 @@ package rs.edu.raf
 import android.app.Application
 import di.KoinInitializer
 
-class MyApp: Application() {
+class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 

@@ -9,9 +9,9 @@ actual class KoinInitializer {
     actual fun init() {
         startKoin {
             modules(
+                dataModule,
                 sharedModule,
-                domainModule,
-                dataModule
+                domainModule
             )
         }
     }
