@@ -7,6 +7,7 @@ import domain.repository.ILoginRepository
 import domain.repository.IUserPreference
 import domain.usecase.login.IsUserActiveUseCase
 import domain.usecase.login.LoginUseCase
+import domain.usecase.splash.CheckIfUserLoggedInUseCase
 import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -50,5 +51,5 @@ val sharedModule = module {
     //use-case
     single { IsUserActiveUseCase(get()) }
     single { LoginUseCase(get(), get()) }
-
+    single { CheckIfUserLoggedInUseCase(get()) }
 }

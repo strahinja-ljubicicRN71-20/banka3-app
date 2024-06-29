@@ -53,10 +53,10 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.material3)
 
             //Koin
             api(libs.koin.core)
@@ -122,7 +122,6 @@ android {
     }
 }
 dependencies {
-    implementation(libs.androidx.material3.android)
     implementation(compose.desktop.currentOs)
 }
 

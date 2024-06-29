@@ -52,12 +52,6 @@ class LoginViewModel(
         }
     }
 
-    fun navigateToNextScreen() {
-        viewModelScope.launch(Dispatchers.Default) {
-            _nextScreen.send(Unit)
-        }
-    }
-
     private fun email(): String = _state.value.email
 
     private fun password(): String = _state.value.password
