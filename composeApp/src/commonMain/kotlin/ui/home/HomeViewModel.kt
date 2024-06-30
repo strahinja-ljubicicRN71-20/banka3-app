@@ -3,8 +3,10 @@ package ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import domain.model.account.Account
+import domain.model.transaction.Transaction
 import domain.model.user.User
 import domain.usecase.account.GetUserAccountsUseCase
+import domain.usecase.transaction.GetAccountTransactionsUseCase
 import domain.usecase.user.GetUserInfoUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,14 +17,16 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val getUserInfoUseCase: GetUserInfoUseCase,
-    private val getUserAccountsUseCase: GetUserAccountsUseCase
+    private val getUserAccountsUseCase: GetUserAccountsUseCase,
+    private val getAccountTransactionsUseCase: GetAccountTransactionsUseCase
 ) : ViewModel() {
 
     data class State(
         val firstName: String = "",
         val lastName: String = "",
         val userId: String = "",
-        val accounts: List<Account> = emptyList(),
+        val rsdAccount: Account = Account(),
+        val transactions: List<Transaction> = emptyList(),
         val isLoading: Boolean = false
     )
 
@@ -36,28 +40,22 @@ class HomeViewModel(
     private fun loadData() {
         viewModelScope.launch {
             setIsLoading(true)
-            val userInfo = getUserInfo()
-            val accounts = getUserAccounts(userInfo.id)
+            val userInfo = getUserInfoUseCase()
+            val rsdAccount = getUserAccountsUseCase(userInfo.id).find { it.currency.mark == "RSD" } ?: Account()
+            val transactions = getAccountTransactionsUseCase(rsdAccount.accountNumber)
             delay(1000)
-            updateState(user = userInfo, accounts = accounts)
+            updateState(user = userInfo, rsdAccount = rsdAccount, transactions = transactions)
         }
     }
 
-    private suspend fun getUserInfo(): User {
-        return getUserInfoUseCase()
-    }
-
-    private suspend fun getUserAccounts(userId: String): List<Account> {
-        return getUserAccountsUseCase(userId)
-    }
-
-    private fun updateState(user: User, accounts: List<Account>) {
+    private fun updateState(user: User, rsdAccount: Account, transactions: List<Transaction>) {
         _state.update {
             it.copy(
                 firstName = user.firstName,
                 lastName = user.lastName,
                 userId = user.id,
-                accounts = accounts,
+                rsdAccount = rsdAccount,
+                transactions = transactions,
                 isLoading = false
             )
         }
