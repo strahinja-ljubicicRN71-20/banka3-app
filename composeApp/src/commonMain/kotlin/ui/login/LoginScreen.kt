@@ -21,13 +21,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,11 +39,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import banka3_app.composeapp.generated.resources.Res
 import banka3_app.composeapp.generated.resources.background
 import banka3_app.composeapp.generated.resources.logofull
-import navigation.AppDestinations
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import utils.collectAsStateMultiplatform
@@ -53,18 +50,14 @@ import utils.koinViewModel
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel = koinViewModel(),
-    navController: NavController
+    onSuccessfulLogin: () -> Unit
 ) {
 
     val state by loginViewModel.state.collectAsStateMultiplatform()
 
     LaunchedEffect(key1 = null) {
         loginViewModel.nextScreen.collect {
-            navController.navigate(AppDestinations.SplashScreen.path) {
-                popUpTo(0.toString()) {
-                    inclusive = true
-                }
-            }
+            onSuccessfulLogin.invoke()
         }
     }
     Icons.Default.Check
@@ -194,10 +187,6 @@ fun LoginForm(
 
         Button(
             modifier = modifier.width(200.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFF114D7B),
-                contentColor = Color.White
-            ),
             content = { Text(text = loginButtonText) },
             onClick = onLoginClicked
         )

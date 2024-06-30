@@ -5,6 +5,6 @@ import ui.login.LoginViewModel
 import org.koin.dsl.module
 
 actual val domainModule = module {
-    factory { IsUserActiveUseCase() }
-    factory { LoginViewModel(get()) }
+    factory { IsUserActiveUseCase(get()) }
+    factory { LoginViewModel(get(), get(), get()) }
 }

@@ -53,10 +53,11 @@ kotlin {
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.material3)
+            implementation(libs.androidx.constraintlayout)
 
             //Koin
             api(libs.koin.core)
@@ -75,6 +76,8 @@ kotlin {
             //Datastore
             implementation(libs.androidx.datastore)
             implementation(libs.androidx.datastore.preferences.core)
+
+            //Jwt
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -122,7 +125,6 @@ android {
     }
 }
 dependencies {
-    implementation(libs.androidx.material3.android)
     implementation(compose.desktop.currentOs)
 }
 
