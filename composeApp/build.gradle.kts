@@ -57,6 +57,7 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
             implementation(compose.material3)
+            implementation(libs.androidx.constraintlayout)
 
             //Koin
             api(libs.koin.core)
@@ -75,6 +76,8 @@ kotlin {
             //Datastore
             implementation(libs.androidx.datastore)
             implementation(libs.androidx.datastore.preferences.core)
+
+            //Jwt
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)

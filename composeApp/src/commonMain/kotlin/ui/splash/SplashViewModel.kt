@@ -2,7 +2,7 @@ package ui.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import domain.usecase.splash.CheckIfUserLoggedInUseCase
+import domain.usecase.splash.CheckIfUserAlreadyLoggedInUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val checkIfUserLoggedInUseCase: CheckIfUserLoggedInUseCase
+    private val checkIfUserAlreadyLoggedInUseCase: CheckIfUserAlreadyLoggedInUseCase
 ) : ViewModel() {
 
     private val _nextScreen = Channel<NextScreen>()
@@ -18,7 +18,7 @@ class SplashViewModel(
 
     fun checkIfUserLoggedIn() {
         viewModelScope.launch(Dispatchers.IO) {
-            val isLoggedIn = checkIfUserLoggedInUseCase()
+            val isLoggedIn = checkIfUserAlreadyLoggedInUseCase()
             if (isLoggedIn) {
                 _nextScreen.send(NextScreen.Main)
             } else {

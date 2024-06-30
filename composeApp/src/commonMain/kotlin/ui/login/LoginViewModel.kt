@@ -6,6 +6,7 @@ import domain.model.login.IsUserActiveResult
 import domain.model.login.LoginResult
 import domain.usecase.login.IsUserActiveUseCase
 import domain.usecase.login.LoginUseCase
+import domain.usecase.user.StoreUserInfoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.channels.Channel
@@ -18,6 +19,7 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val isUserActive: IsUserActiveUseCase,
+    private val storeUserInfo: StoreUserInfoUseCase,
     private val login: LoginUseCase
 ) : ViewModel() {
 
@@ -79,7 +81,11 @@ class LoginViewModel(
     private suspend fun login() {
         val loggedIn: LoginResult = login(email(), password())
         if (loggedIn.isSuccessfulLogin) {
-            _nextScreen.send(Unit)
+            val email = email()
+            val user = storeUserInfo(email)
+            if (user.id.isNotEmpty()) {
+                _nextScreen.send(Unit)
+            }
         }
     }
 }

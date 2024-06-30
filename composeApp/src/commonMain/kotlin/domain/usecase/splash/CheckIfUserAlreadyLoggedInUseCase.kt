@@ -2,7 +2,7 @@ package domain.usecase.splash
 
 import domain.repository.IUserPreference
 
-class CheckIfUserLoggedInUseCase(
+class CheckIfUserAlreadyLoggedInUseCase(
     private val preferences: IUserPreference
 ) {
     suspend operator fun invoke(): Boolean {

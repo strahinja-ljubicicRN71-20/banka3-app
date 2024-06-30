@@ -3,14 +3,23 @@ package di.shared
 import data.di.factory.HttpClientFactory
 import data.preference.UserPreference
 import data.repository.login.remote.LoginRepository
+import data.repository.user.UserInfoMapper
+import data.repository.user.remote.UserRepository
 import domain.repository.ILoginRepository
 import domain.repository.IUserPreference
+import domain.repository.IUserRepository
 import domain.usecase.login.IsUserActiveUseCase
 import domain.usecase.login.LoginUseCase
-import domain.usecase.splash.CheckIfUserLoggedInUseCase
+import domain.usecase.splash.CheckIfUserAlreadyLoggedInUseCase
+import domain.usecase.user.GetUserInfoUseCase
+import domain.usecase.user.StoreUserInfoUseCase
 import io.ktor.client.HttpClient
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+
+private val mapperModule = module {
+    single { UserInfoMapper() }
+}
 
 private val httpClientModule = module {
     single<HttpClient>(named("user-service")) {
@@ -39,9 +48,12 @@ private val httpClientModule = module {
     }
 
     single<ILoginRepository> { LoginRepository(get(named("user-service"))) }
+    single<IUserRepository> { UserRepository(get(named("user-service")), get()) }
 }
 
 val sharedModule = module {
+
+    includes(mapperModule)
 
     includes(httpClientModule)
 
@@ -51,5 +63,7 @@ val sharedModule = module {
     //use-case
     single { IsUserActiveUseCase(get()) }
     single { LoginUseCase(get(), get()) }
-    single { CheckIfUserLoggedInUseCase(get()) }
+    single { CheckIfUserAlreadyLoggedInUseCase(get()) }
+    single { StoreUserInfoUseCase(get(), get()) }
+    single { GetUserInfoUseCase(get()) }
 }
