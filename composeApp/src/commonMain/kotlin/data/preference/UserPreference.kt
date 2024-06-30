@@ -34,10 +34,6 @@ class UserPreference(
         preferences.edit { preferences ->
             preferences[activeUser] = Json.encodeToString(user)
         }
-        val user = preferences.data.map { preferences ->
-            preferences[activeUser] ?: ""
-        }.first()
-        println(user)
     }
 
     override suspend fun getUserData(): User {
