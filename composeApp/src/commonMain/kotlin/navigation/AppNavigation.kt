@@ -7,9 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import domain.model.payment.PaymentScreenInfo
+import kotlinx.serialization.json.Json
 import ui.MainScreen
 import ui.home.HomeScreen
 import ui.login.LoginScreen
+import ui.payment.NewPaymentScreen
 import ui.payment.PaymentScreen
 import ui.profile.ProfileScreen
 import ui.splash.SplashScreen
@@ -28,14 +31,22 @@ fun AppNavigation() {
             composable(AppDestinations.SplashScreen.path) {
                 SplashScreen(
                     onSplashScreenEnd = { screenPath ->
-                        navigateAndForget(navController = navController, destination = screenPath)
+                        navigateAndForget(
+                            navController = navController,
+                            destination = screenPath,
+                            route = NavigationDestinations.Auth.path
+                        )
                     }
                 )
             }
             composable(AppDestinations.Login.path) {
                 LoginScreen(
                     onSuccessfulLogin = {
-                        navigateAndForget(navController = navController, destination = AppDestinations.MainScreen)
+                        navigateAndForget(
+                            navController = navController,
+                            destination = AppDestinations.MainScreen,
+                            route = NavigationDestinations.Auth.path
+                        )
                     }
                 )
             }
@@ -52,7 +63,7 @@ fun AppNavigation() {
 }
 
 @Composable
-fun BottomNavGraph(
+fun MainNavGraph(
     navController: NavHostController
 ) {
     NavHost(
@@ -60,7 +71,11 @@ fun BottomNavGraph(
         startDestination = MainDestinations.HomeScreen.path
     ) {
         composable(MainDestinations.HomeScreen.path) {
-            HomeScreen()
+            HomeScreen(
+                onNewPaymentClick = {
+                    navController.navigate("${MainDestinations.NewPayment.path}/$it")
+                }
+            )
         }
         composable(MainDestinations.PaymentScreen.path) {
             PaymentScreen()
@@ -68,12 +83,16 @@ fun BottomNavGraph(
         composable(MainDestinations.ProfileScreen.path) {
             ProfileScreen()
         }
+        composable("${MainDestinations.NewPayment.path}/{paymentScreenInfo}") { backStackEntry ->
+            val paymentScreenInfo = backStackEntry.arguments?.getString("paymentScreenInfo")
+            NewPaymentScreen(navController = navController, paymentScreenInfo = Json.decodeFromString(paymentScreenInfo!!))
+        }
     }
 }
 
-fun navigateAndForget(navController: NavController, destination: IDestination) {
+fun navigateAndForget(navController: NavController, destination: IDestination, route: String) {
     navController.navigate(destination.path) {
-        popUpTo(0.toString()) {
+        popUpTo(route) {
             inclusive = true
         }
     }

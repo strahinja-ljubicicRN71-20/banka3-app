@@ -18,6 +18,7 @@ import banka3_app.composeapp.generated.resources.logofull
 import kotlinx.coroutines.delay
 import navigation.AppDestinations
 import navigation.IDestination
+import navigation.NavigationDestinations
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import utils.koinViewModel
@@ -34,7 +35,7 @@ fun SplashScreen(
         splashViewModel.nextScreen.collect {
             when(it) {
                 NextScreen.Login -> onSplashScreenEnd.invoke(AppDestinations.Login)
-                NextScreen.Main -> onSplashScreenEnd.invoke(AppDestinations.MainScreen)
+                NextScreen.Main -> onSplashScreenEnd.invoke(NavigationDestinations.App)
             }
         }
     }

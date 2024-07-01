@@ -9,8 +9,10 @@ import domain.usecase.account.GetUserAccountsUseCase
 import domain.usecase.transaction.GetAccountTransactionsUseCase
 import domain.usecase.user.GetUserInfoUseCase
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
