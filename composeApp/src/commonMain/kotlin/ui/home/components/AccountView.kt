@@ -23,11 +23,11 @@ fun AccountView(account: Account) {
         elevation = CardDefaults.cardElevation(
             defaultElevation = 4.dp,
         ),
-        modifier = Modifier.fillMaxWidth().height(200.dp)
-            .padding(paddingValues = PaddingValues(start = 16.dp, end = 16.dp))
+        modifier = Modifier.fillMaxWidth()
+            .padding(paddingValues = PaddingValues(start = 16.dp, end = 16.dp, bottom = 16.dp))
     ) {
         Text(
-            modifier = Modifier.padding(PaddingValues(start = 16.dp, top = 16.dp)),
+            modifier = Modifier.padding(PaddingValues(start = 16.dp, top = 8.dp)),
             text = account.accountNumber,
             fontSize = 16.sp,
             color = Color.DarkGray
@@ -36,7 +36,7 @@ fun AccountView(account: Account) {
             modifier = Modifier.fillMaxWidth().padding(PaddingValues(start = 16.dp))
         ) {
             Text(
-                modifier = Modifier.padding(PaddingValues(start = 16.dp, top = 16.dp)),
+                modifier = Modifier.padding(PaddingValues(start = 16.dp, top = 8.dp)),
                 text = "Available balance",
                 fontSize = 16.sp,
                 color = Color.DarkGray
@@ -49,14 +49,14 @@ fun AccountView(account: Account) {
                 fontWeight = FontWeight.Bold
             )
             Text(
-                modifier = Modifier.padding(PaddingValues(start = 16.dp, top = 16.dp)),
+                modifier = Modifier.padding(PaddingValues(start = 16.dp, top = 8.dp)),
                 text = "Reserved amount",
                 fontSize = 16.sp,
                 color = Color.DarkGray
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                modifier = Modifier.padding(PaddingValues(start = 32.dp)),
+                modifier = Modifier.padding(PaddingValues(start = 32.dp, bottom = 8.dp)),
                 text = "${account.currency.mark}: ${account.reservedAmount}",
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold

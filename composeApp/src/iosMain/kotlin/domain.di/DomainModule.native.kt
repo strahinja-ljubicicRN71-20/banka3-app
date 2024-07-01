@@ -5,6 +5,7 @@ import org.koin.dsl.module
 import ui.login.LoginViewModel
 import ui.splash.SplashViewModel
 import ui.home.HomeViewModel
+import ui.payment.PaymentViewModel
 
 actual val domainModule = module {
 
@@ -12,4 +13,5 @@ actual val domainModule = module {
     singleOf(::LoginViewModel)
     singleOf(::SplashViewModel)
     singleOf(::HomeViewModel)
+    singleOf(::PaymentViewModel)
 }

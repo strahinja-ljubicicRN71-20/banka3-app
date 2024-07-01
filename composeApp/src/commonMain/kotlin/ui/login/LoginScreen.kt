@@ -38,6 +38,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import banka3_app.composeapp.generated.resources.Res
 import banka3_app.composeapp.generated.resources.background
@@ -180,6 +181,7 @@ fun LoginForm(
                     imeAction = ImeAction.Send,
                     keyboardType = KeyboardType.Password
                 ),
+                visualTransformation = PasswordVisualTransformation()
             )
 
             Spacer(modifier = Modifier.height(20.dp))

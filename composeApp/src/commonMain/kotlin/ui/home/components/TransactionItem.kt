@@ -34,7 +34,7 @@ fun TransactionItem(
     isLastItem: Boolean = false
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth().height(100.dp)
+        modifier = Modifier.fillMaxWidth().height(80.dp)
     ) {
         Column(
             modifier = Modifier.fillMaxHeight().weight(1f),

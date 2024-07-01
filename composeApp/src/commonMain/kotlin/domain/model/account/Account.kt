@@ -1,7 +1,9 @@
 package domain.model.account
 
 import domain.model.account.currency.Currency
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Account(
     val accountId: Long = 0,
     val userId: Long = 0,
